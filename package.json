@@ -1,0 +1,24 @@
+{
+  "name": "api-node-clean",
+  "version": "1.0.0",
+  "description": "api nodejs with clean architecture",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pauloalchemist/api-node-clean.git"
+  },
+  "keywords": [
+    "nodejs",
+    "javascript",
+    "express"
+  ],
+  "author": "Paulo Lins",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pauloalchemist/api-node-clean/issues"
+  },
+  "homepage": "https://github.com/pauloalchemist/api-node-clean#readme"
+}
