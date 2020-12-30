@@ -1,16 +1,29 @@
 const LoginRouter = require('../../src/presentation/routers/login-router')
 const MissingParamError = require('../../src/presentation/helpers/missing-param-error')
+const InvalidParamError = require('../../src/presentation/helpers/invalid-error')
 const UnauthorizdError = require('../../src/presentation/helpers/unauthorized-error')
 const ServerError = require('../../src/presentation/helpers/server-error')
 
 const makeSut = () => {
   const authUseCaseSpy = makeAuthUseCase()
-  authUseCaseSpy.accessToken = 'valid_token'
-  const sut = new LoginRouter(authUseCaseSpy)
+  const emailValidatorSpy = makeEmailValidator()
+  const sut = new LoginRouter(authUseCaseSpy, emailValidatorSpy)
   return {
     sut,
-    authUseCaseSpy
+    authUseCaseSpy,
+    emailValidatorSpy
   }
+}
+
+const makeEmailValidator = () => {
+  class EmailValidatorSpy {
+    isValid (email) {
+      return this.isEmailValid
+    }
+  }
+  const emailValidatorSpy = new EmailValidatorSpy()
+  emailValidatorSpy.isEmailValid = true
+  return emailValidatorSpy
 }
 
 const makeAuthUseCase = () => {
@@ -21,7 +34,9 @@ const makeAuthUseCase = () => {
       return this.accessToken
     }
   }
-  return new AuthUseCaseSpy()
+  const authUseCaseSpy = new AuthUseCaseSpy()
+  authUseCaseSpy.accessToken = 'valid_token'
+  return authUseCaseSpy
 }
 
 const makeAuthUseCaseWithError = () => {
@@ -150,5 +165,19 @@ describe('Login Router', () => {
     }
     const httpResponse = await sut.route(httpRequest)
     expect(httpResponse.statusCode).toBe(500)
+  })
+
+  test('Should return 400 if invalid email is provided', async () => {
+    const { sut, emailValidatorSpy } = makeSut()
+    emailValidatorSpy.isEmailValid = false
+    const httpRequest = {
+      body: {
+        email: 'invalid_hadduken@shoryuken.com',
+        password: '123456'
+      }
+    }
+    const httpResponse = await sut.route(httpRequest)
+    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.body).toEqual(new InvalidParamError('email'))
   })
 })
