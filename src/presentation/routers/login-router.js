@@ -1,6 +1,5 @@
 const httpResponse = require('../helpers/http-response')
-const MissingParamError = require('../helpers/missing-param-error')
-const InvalidParamError = require('../helpers/invalid-error')
+const { MissingParamError, InvalidParamError } = require('../errors')
 
 module.exports = class LoginRouter {
   constructor (authUseCase, emailValidator) {
@@ -29,7 +28,7 @@ module.exports = class LoginRouter {
 
       return httpResponse.ok({ accessToken })
     } catch (error) {
-      //console.error(error) boa opção para produção
+      // console.error(error) boa opção para produção
       return httpResponse.serverError()
     }
   }

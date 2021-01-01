@@ -1,8 +1,10 @@
 const LoginRouter = require('../../src/presentation/routers/login-router')
-const MissingParamError = require('../../src/presentation/helpers/missing-param-error')
-const InvalidParamError = require('../../src/presentation/helpers/invalid-error')
-const UnauthorizdError = require('../../src/presentation/helpers/unauthorized-error')
-const ServerError = require('../../src/presentation/helpers/server-error')
+const {
+  UnauthorizdError,
+  ServerError,
+  InvalidParamError,
+  MissingParamError
+} = require('../../src/presentation/errors')
 
 const makeSut = () => {
   const authUseCaseSpy = makeAuthUseCase()
@@ -33,7 +35,8 @@ const makeEmailValidatorWithError = () => {
       throw new Error()
     }
   }
-  new EmailValidatorSpy()
+  const newEmailValidatorSpy = new EmailValidatorSpy()
+  return newEmailValidatorSpy
 }
 
 const makeAuthUseCase = () => {
@@ -55,7 +58,8 @@ const makeAuthUseCaseWithError = () => {
       throw new Error()
     }
   }
-  new AuthUseCaseSpy()
+  const newAuthUseCaseSpy = new AuthUseCaseSpy()
+  return newAuthUseCaseSpy
 }
 
 describe('Login Router', () => {
@@ -152,7 +156,7 @@ describe('Login Router', () => {
   })
 
   test('Should return 500 if AuthUseCase has no auth method', async () => {
-    const sut = new LoginRouter({}) //objeto vazio para representar ausência do auth
+    const sut = new LoginRouter({}) // objeto vazio para representar ausência do auth
     const httpRequest = {
       body: {
         email: 'hadduken@shoryuken.com',
@@ -166,7 +170,7 @@ describe('Login Router', () => {
 
   test('Should return 500 if AuthUseCase throws', async () => {
     const authUseCaseSpy = makeAuthUseCaseWithError()
-    const sut = new LoginRouter(authUseCaseSpy) //objeto vazio para representar ausência do auth
+    const sut = new LoginRouter(authUseCaseSpy) // objeto vazio para representar ausência do auth
     const httpRequest = {
       body: {
         email: 'hadduken@shoryuken.com',
@@ -207,7 +211,7 @@ describe('Login Router', () => {
 
   test('Should return 500 if EmailValidator has no isValid provided', async () => {
     const authUseCaseSpy = makeAuthUseCase()
-    const sut = new LoginRouter(authUseCaseSpy, {}) //objeto vazio para simular ausência de isValid.
+    const sut = new LoginRouter(authUseCaseSpy, {}) // objeto vazio para simular ausência de isValid.
     const httpRequest = {
       body: {
         email: 'hadduken@shoryuken.com',
@@ -222,7 +226,7 @@ describe('Login Router', () => {
   test('Should return 500 if EmailValidator throws', async () => {
     const authUseCaseSpy = makeAuthUseCase()
     const emailValidatorSpy = makeEmailValidatorWithError()
-    const sut = new LoginRouter(authUseCaseSpy, emailValidatorSpy) //objeto vazio para representar ausência do auth
+    const sut = new LoginRouter(authUseCaseSpy, emailValidatorSpy) // objeto vazio para representar ausência do auth
     const httpRequest = {
       body: {
         email: 'hadduken@shoryuken.com',
