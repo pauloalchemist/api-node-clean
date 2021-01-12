@@ -124,4 +124,14 @@ describe('Auth UseCase', () => {
     await sut.auth('qualqueremailValido@mail.com', 'qualquersenhaValida')
     expect(tokenGeneratorSpy.userId).toBe(loadUserByEmailRepository.user.id)
   })
+
+  test('Should return an accessToken if correct credentials are provided', async () => {
+    const { sut, tokenGeneratorSpy } = makeSut() // {} representa uma instância do repostitória inválida.
+    const accessToken = await sut.auth(
+      'qualqueremailValido@mail.com',
+      'qualquersenhaValida'
+    )
+    expect(accessToken).toBe(tokenGeneratorSpy.accessToken)
+    expect(accessToken).toBeTruthy()
+  })
 })
