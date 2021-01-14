@@ -128,7 +128,25 @@ describe('Auth UseCase', () => {
     const suts = [].concat(
       new AuthUseCase(),
       new AuthUseCase({ loadUserByEmailRepository: null }),
-      new AuthUseCase({ loadUserByEmailRepository: invalid })
+      new AuthUseCase({ loadUserByEmailRepository: invalid }),
+      new AuthUseCase({
+        loadUserByEmailRepository: makeLoadUserByEmailRepository(),
+        encrypter: null
+      }),
+      new AuthUseCase({
+        loadUserByEmailRepository: makeLoadUserByEmailRepository(),
+        encrypter: invalid
+      }),
+      new AuthUseCase({
+        loadUserByEmailRepository: makeLoadUserByEmailRepository(),
+        encrypter: makeEncrypter(),
+        tokenGenerator: null
+      }),
+      new AuthUseCase({
+        loadUserByEmailRepository: makeLoadUserByEmailRepository(),
+        encrypter: makeEncrypter(),
+        tokenGenerator: invalid
+      })
     )
     for (const sut of suts) {
       const promise = sut.auth('qualqueremail@mail.com', 'qualquer senha')
