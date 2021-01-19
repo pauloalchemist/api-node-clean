@@ -49,15 +49,24 @@ describe('LoadUserByEmail Repository', () => {
     })
   })
 
-  test('Should return an user if no userModel is provided', async () => {
+  test('Should return throws if no userModel is provided', async () => {
     const sut = new LoadUserByEmailRepository()
     const promise = sut.load('any_email@mail.com')
     expect(promise).rejects.toThrow()
   })
 
-  test('Should return an user if no email is provided', async () => {
+  test('Should return throws if no email is provided', async () => {
     const { sut } = makeSut()
     const promise = sut.load()
     expect(promise).rejects.toThrow(new MissingParamError('email'))
+  })
+
+  test('Should reconnect when getDb() is invoked and client is disconnected', async () => {
+    const sut = MongoHelper
+    expect(sut.db).toBeTruthy()
+    await sut.disconnect()
+    expect(sut.db).toBeFalsy()
+    await sut.getDb()
+    expect(sut.db).toBeTruthy()
   })
 })
