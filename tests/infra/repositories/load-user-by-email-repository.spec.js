@@ -47,4 +47,10 @@ describe('LoadUserByEmail Repository', () => {
       password: fakeUser.ops[0].password
     })
   })
+
+  test('Should return an user if user found', async () => {
+    const sut = new LoadUserByEmailRepository()
+    const promise = sut.load('any_email@mail.com')
+    expect(promise).rejects.toThrow()
+  })
 })
