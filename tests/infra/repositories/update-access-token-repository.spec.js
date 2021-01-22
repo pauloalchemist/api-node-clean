@@ -1,6 +1,6 @@
-const MongoHelper = require('../../../src/domain/infra/helpers/mongo-helper')
+const MongoHelper = require('../../../src/infra/helpers/mongo-helper')
 const { MissingParamError } = require('../../../src/utils/errors-generics')
-const UpdateAccessTokenRepository = require('../../../src/domain/infra/repository/update-access-token-repository')
+const UpdateAccessTokenRepository = require('../../../src/infra/repository/update-access-token-repository')
 
 let db
 

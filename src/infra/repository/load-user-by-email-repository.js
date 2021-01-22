@@ -1,4 +1,4 @@
-const { MissingParamError } = require('../../../utils/errors-generics')
+const { MissingParamError } = require('../../utils/errors-generics')
 
 module.exports = class LoadUserByEmailRepository {
   constructor (userModel) {

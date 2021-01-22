@@ -1,5 +1,5 @@
-const MongoHelper = require('../../../src/domain/infra/helpers/mongo-helper')
-const LoadUserByEmailRepository = require('../../../src/domain/infra/repository/load-user-by-email-repository')
+const MongoHelper = require('../../../src/infra/helpers/mongo-helper')
+const LoadUserByEmailRepository = require('../../../src/infra/repository/load-user-by-email-repository')
 const { MissingParamError } = require('../../../src/utils/errors-generics')
 
 let db
