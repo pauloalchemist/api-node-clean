@@ -2,7 +2,7 @@ const MongoHelper = require('../../../src/infra/helpers/mongo-helper')
 const LoadUserByEmailRepository = require('../../../src/infra/repository/load-user-by-email-repository')
 const { MissingParamError } = require('../../../src/utils/errors-generics')
 
-let db
+let userModel
 
 const makeSut = () => {
   return new LoadUserByEmailRepository()
@@ -11,11 +11,11 @@ const makeSut = () => {
 describe('LoadUserByEmail Repository', () => {
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL)
-    db = await MongoHelper.getDb()
+    userModel = await MongoHelper.getCollection('users')
   })
 
   beforeEach(async () => {
-    await db.collection('users').deleteMany()
+    await userModel.deleteMany()
   })
 
   afterAll(async () => {
@@ -30,7 +30,7 @@ describe('LoadUserByEmail Repository', () => {
 
   test('Should return an user if user found', async () => {
     const sut = makeSut()
-    const fakeUser = await db.collection('users').insertOne({
+    const fakeUser = await userModel.insertOne({
       email: 'valid_email@mail.com',
       name: 'any_name',
       age: 60,
@@ -50,12 +50,12 @@ describe('LoadUserByEmail Repository', () => {
     expect(promise).rejects.toThrow(new MissingParamError('email'))
   })
 
-  test('Should reconnect when getDb() is invoked and client is disconnected', async () => {
+  test('Should reconnect when getCollection() is invoked and client is disconnected', async () => {
     const sut = MongoHelper
     expect(sut.db).toBeTruthy()
     await sut.disconnect()
     expect(sut.db).toBeFalsy()
-    await sut.getDb()
+    await sut.getCollection('users')
     expect(sut.db).toBeTruthy()
   })
 })
