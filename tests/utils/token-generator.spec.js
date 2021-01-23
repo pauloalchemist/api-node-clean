@@ -43,7 +43,7 @@ describe('Token Genarator', () => {
     expect(promise).rejects.toThrow(new MissingParamError('secret'))
   })
 
-  test('Should throw if no secret is proveded', async () => {
+  test('Should throw if no id is proveded', async () => {
     const sut = makeSut()
     const promise = sut.generate()
     expect(promise).rejects.toThrow(new MissingParamError('id'))
