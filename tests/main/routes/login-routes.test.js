@@ -24,6 +24,8 @@ describe('Login Routes', () => {
       password: bcrypt.hashSync('hashed_password', 10)
     })
 
+    console.log(bcrypt.hashSync('hashed_password', 10))
+
     await request(app)
       .post('/api/login')
       .send({
